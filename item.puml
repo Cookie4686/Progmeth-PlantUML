@@ -1,4 +1,5 @@
 @startuml
+top to bottom direction
 interface TurnActivable [[java:interfaces.TurnActivable]] {
 	activatePerTurn(): void
 }
@@ -52,138 +53,6 @@ abstract class Item [[java:game.item.Item]] {
 	+getCurrentTranslateY(): double
 	+setCurrentTranslateY(currentTranslateY: double): void
 }
-abstract class ItemWithCost [[java:game.item.ItemWithCost]] {
-	#costActivate: int
-	+ItemWithCost(name, detail, costActivate, height, tier)
-	+ItemWithCost(name, detail, costActivate, width, height, tier)
-	+isEnoughEnergy(): boolean
-	+activatePerClick(): void
-	+{abstract} activateItem(): void
-	+getCostActivate(): int
-	+setCostActivate(costActivate: int): void
-}
-abstract class Wearable [[java:game.item.wearable.Wearable]] {
-	-effects: ArrayList<Effect>
-	-initialShield: int
-	-shield: int
-	-increaseShield: int
-	+Wearable(name, detail, initialShield, increaseShield, effects, width, height, tier)
-	+reStatBeforeUpdate(): void
-	+statUpdate(): void
-	+activatePerTurn(): void
-	#getProvide(): String
-	+toString(): String
-	+getEffects(): ArrayList<Effect>
-	+getShield(): int
-	+addShield(shield: int): void
-	+setShield(shield: int): void
-	+getInitialShield(): int
-	+setIncreaseShield(increaseShield: int): void
-	+getIncreaseShield(): int
-}
-abstract class Relic [[java:game.item.relic.Relic]] {
-	-effect: Effect
-	#range: int
-	+Relic(name, detail, effect, range, width, height, tier)
-	+Relic(name, detail, effect, range, height, tier)
-	-increaseShield(items: ArrayList<Item>): void
-	-increaseDamage(items: ArrayList<Item>): void
-	+activate(): void
-	#getProvide(): String
-	+getEffectType(): EffectType
-	+getEffectAmount(): int
-	+getRange(): int
-}
-Relic --> "*" Item : findItemInSlot()
-Item <|-- Relic
-class PassiveRelic [[java:game.item.relic.PassiveRelic]] {
-	+PassiveRelic(name, detail, effect, range, width, height, tier)
-	+PassiveRelic(name, detail, effect, range, height, tier)
-	+statUpdate(): void
-	+toString(): String
-}
-Relic <|-- PassiveRelic
-StatUpdatable <|.. PassiveRelic
-class Potion [[java:game.item.consumable.Potion]] {
-	-{static} limit: int
-	+Potion(name, detail, container, costActivate, durability, effect, width, height, tier)
-	+isStackable(item: Item): boolean
-	#getHeader(): String
-	+toString(): String
-	+getLimit(): int
-}
-FoodWithContainer <|-- Potion
-class ShieldItem [[java:game.item.ShieldItem]] {
-	-effects: ArrayList<Effect>
-	-shield: int
-	+ShieldItem(name, detail, shield, effects, costActivate, width, height, tier)
-	+activateItem(): void
-	+toString(): String
-}
-ItemWithCost <|-- ShieldItem
-class IncreaseCostWeapon [[java:game.item.weapon.IncreaseCostWeapon]] {
-	-initCost: int
-	-increaseCost: int
-	+IncreaseCostWeapon(name, detail, effects, damage, costActivate, increaseCost, width, tier)
-	+IncreaseCostWeapon(name, detail, effects, damage, costActivate, increaseCost, width, height, tier)
-	+activatePerTurn(): void
-	+activateItem(): void
-	+toString(): String
-}
-SpecialWeapon <|-- IncreaseCostWeapon
-TurnActivable <|.. IncreaseCostWeapon
-
-class Weapon [[java:game.item.weapon.Weapon]] {
-	-initDamage: int
-	-damage: int
-	+Weapon(name, detail, initDamage, costActivate, width, tier)
-	+Weapon(name, detail, initDamage, costActivate, width, height, tier)
-	+reStatBeforeUpdate(): void
-	+activatePerClick(): void
-	+activateItem(): void
-	+getProvide(): String
-	+toString(): String
-	+getInitDamage(): int
-	+getDamage(): int
-	+setDamage(damage: int): void
-	+addDamage(damage: int): void
-}
-ItemWithCost <|-- Weapon
-ReStatable <|.. Weapon
-class FoodWithContainer [[java:game.item.consumable.FoodWithContainer]] {
-	-container: String
-	+FoodWithContainer(name, detail, container, costActivate, durability, effect, width, height, tier)
-	#getHeader(): String
-	+toString(): String
-	+getContainer(): String
-}
-Consumable <|-- FoodWithContainer
-class Helmet [[java:game.item.wearable.Helmet]] {
-	+Helmet(name, detail, initialShield, increaseShield, effects, width, height, tier)
-	-underSlot(): int
-	+statUpdate(): void
-	+toString(): String
-}
-Wearable <|-- Helmet
-Item <|-- Wearable
-TurnActivable <|.. Wearable
-StatUpdatable <|.. Wearable
-ReStatable <|.. Wearable
-class ActiveRelic [[java:game.item.relic.ActiveRelic]] {
-	-costActivate: int
-	-isUsed: boolean
-	+ActiveRelic(name, detail, effect, costActivate, range, width, height, tier)
-	+ActiveRelic(name, detail, effect, costActivate, range, height, tier)
-	+isEnoughEnergy(): boolean
-	+activatePerClick(): void
-	+getCostActivate(): int
-	+setCostActivate(costActivate: int): void
-	+activatePerTurn(): void
-	+toString(): String
-}
-Relic <|-- ActiveRelic
-Clickable <|.. ActiveRelic
-TurnActivable <|.. ActiveRelic
 class ManaOrb [[java:game.item.ManaOrb]] {
 	-amount: int
 	+ManaOrb(name, detail, amount, width, height, tier)
@@ -192,10 +61,6 @@ class ManaOrb [[java:game.item.ManaOrb]] {
 	+getAmount(): int
 	+setAmount(amount: int): void
 }
-Item <|-- ManaOrb
-TurnActivable <|.. ManaOrb
-Item <|-- ItemWithCost
-Clickable <|.. ItemWithCost
 class Container [[java:game.item.consumable.Container]] {
 	-damage: int
 	+Container(name, detail, damage, width, height, tier)
@@ -205,34 +70,6 @@ class Container [[java:game.item.consumable.Container]] {
 	+getDamage(): int
 	+setDamage(damage: int): void
 }
-Item <|-- Container
-Clickable <|.. Container
-class ManaWeapon [[java:game.item.weapon.ManaWeapon]] {
-	+ManaWeapon(name, detail, effects, damage, costActivate, width, tier)
-	+ManaWeapon(name, detail, effects, damage, costActivate, width, height, tier)
-	+isEnoughEnergy(): boolean
-	+toString(): String
-}
-SpecialWeapon <|-- ManaWeapon
-class SpecialWeapon [[java:game.item.weapon.SpecialWeapon]] {
-	-effects: ArrayList<Effect>
-	+SpecialWeapon(name, detail, effects, damage, costActivate, width, tier)
-	+SpecialWeapon(name, detail, effects, damage, costActivate, width, height, tier)
-	+activateItem(): void
-	+getProvide(): String
-	+toString(): String
-	+getEffects(): ArrayList<Effect>
-}
-Weapon <|-- SpecialWeapon
-Pane <|-- Item
-class Armor [[java:game.item.wearable.Armor]] {
-	+Armor(name, detail, initialShield, increaseShield, effects, width, height, tier)
-	-isMeetCondition(item: Item, items: ArrayList<Item>): boolean
-	-numberOfAdjacent(): int
-	+statUpdate(): void
-	+toString(): String
-}
-Wearable <|-- Armor
 class Coins [[java:game.item.Coins]] {
 	-amount: int
 	+Coins(name, detail, amount, tier)
@@ -242,40 +79,212 @@ class Coins [[java:game.item.Coins]] {
 	+getAmount(): int
 	+setAmount(amount: int): void
 }
+Pane <|-- Item
 Item <|-- Coins
+Item <|-- ManaOrb
+Item <|-- Container
 StatUpdatable <|.. Coins
-class Shoes [[java:game.item.wearable.Shoes]] {
-	+Shoes(name, detail, initialShield, increaseShield, effects, width, height, tier)
-	-emptySpace(): int
-	-isLowest(): boolean
-	+statUpdate(): void
-	+toString(): String
+TurnActivable <|.. ManaOrb
+Clickable <|.. Container
+package costItem {
+  abstract class ItemWithCost [[java:game.item.ItemWithCost]] {
+    #costActivate: int
+    +ItemWithCost(name, detail, costActivate, height, tier)
+    +ItemWithCost(name, detail, costActivate, width, height, tier)
+    +isEnoughEnergy(): boolean
+    +activatePerClick(): void
+    +{abstract} activateItem(): void
+    +getCostActivate(): int
+    +setCostActivate(costActivate: int): void
+  }
+  class ShieldItem [[java:game.item.ShieldItem]] {
+    -effects: ArrayList<Effect>
+    -shield: int
+    +ShieldItem(name, detail, shield, effects, costActivate, width, height, tier)
+    +activateItem(): void
+    +toString(): String
+  }
+  class DamageItem [[java:game.item.DamageItem]] {
+    -AoE: boolean
+    -effects: ArrayList<Effect>
+    +DamageItem(name, detail, effects, costActivate, isAoE, width, height, tier)
+    +activateItem(): void
+    -activateEffect(effect: Effect, enemy: Entity): void
+    +toString(): String
+    +isAoE(): boolean
+  }
+  Item <|-- ItemWithCost
+  Clickable <|.. ItemWithCost
+  ItemWithCost <|-- ShieldItem
+  ItemWithCost <|-- DamageItem
+  package consumableItem {
+    class Consumable [[java:game.item.consumable.Consumable]] {
+      -effect: Effect
+      -costActivate: int
+      -durability: int
+      +Consumable(name, detail, durability, effect, costActivate, width, height, tier)
+      +activateItem(): void
+      #getHeader(): String
+      #getProvideMid(): String
+      +toString(): String
+      +getEffectType(): EffectType
+      +getEffectAmount(): int
+      +getDurability(): int
+      +setDurability(durability: int): void
+    }
+    class FoodWithContainer [[java:game.item.consumable.FoodWithContainer]] {
+      -container: String
+      +FoodWithContainer(name, detail, container, costActivate, durability, effect, width, height, tier)
+      #getHeader(): String
+      +toString(): String
+      +getContainer(): String
+    }
+    class Potion [[java:game.item.consumable.Potion]] {
+      -{static} limit: int
+      +Potion(name, detail, container, costActivate, durability, effect, width, height, tier)
+      +isStackable(item: Item): boolean
+      #getHeader(): String
+      +toString(): String
+      +getLimit(): int
+    }
+    ItemWithCost <|-- Consumable
+    Consumable <|-- FoodWithContainer
+    FoodWithContainer <|-- Potion
+  }
+  package weaponItem {
+    class Weapon [[java:game.item.weapon.Weapon]] {
+      -initDamage: int
+      -damage: int
+      +Weapon(name, detail, initDamage, costActivate, width, tier)
+      +Weapon(name, detail, initDamage, costActivate, width, height, tier)
+      +reStatBeforeUpdate(): void
+      +activatePerClick(): void
+      +activateItem(): void
+      +getProvide(): String
+      +toString(): String
+      +getInitDamage(): int
+      +getDamage(): int
+      +setDamage(damage: int): void
+      +addDamage(damage: int): void
+    }
+    class SpecialWeapon [[java:game.item.weapon.SpecialWeapon]] {
+      -effects: ArrayList<Effect>
+      +SpecialWeapon(name, detail, effects, damage, costActivate, width, tier)
+      +SpecialWeapon(name, detail, effects, damage, costActivate, width, height, tier)
+      +activateItem(): void
+      +getProvide(): String
+      +toString(): String
+      +getEffects(): ArrayList<Effect>
+    }
+    class ManaWeapon [[java:game.item.weapon.ManaWeapon]] {
+      +ManaWeapon(name, detail, effects, damage, costActivate, width, tier)
+      +ManaWeapon(name, detail, effects, damage, costActivate, width, height, tier)
+      +isEnoughEnergy(): boolean
+      +toString(): String
+    }
+    class IncreaseCostWeapon [[java:game.item.weapon.IncreaseCostWeapon]] {
+      -initCost: int
+      -increaseCost: int
+      +IncreaseCostWeapon(name, detail, effects, damage, costActivate, increaseCost, width, tier)
+      +IncreaseCostWeapon(name, detail, effects, damage, costActivate, increaseCost, width, height, tier)
+      +activatePerTurn(): void
+      +activateItem(): void
+      +toString(): String
+    }
+    ItemWithCost <|-- Weapon
+    ReStatable <|.. Weapon
+    Weapon <|-- SpecialWeapon
+    SpecialWeapon <|-- IncreaseCostWeapon
+    TurnActivable <|.. IncreaseCostWeapon
+    SpecialWeapon <|-- ManaWeapon
+  }
 }
-Wearable <|-- Shoes
-class Consumable [[java:game.item.consumable.Consumable]] {
-	-effect: Effect
-	-costActivate: int
-	-durability: int
-	+Consumable(name, detail, durability, effect, costActivate, width, height, tier)
-	+activateItem(): void
-	#getHeader(): String
-	#getProvideMid(): String
-	+toString(): String
-	+getEffectType(): EffectType
-	+getEffectAmount(): int
-	+getDurability(): int
-	+setDurability(durability: int): void
+package wearableItem {
+  abstract class Wearable [[java:game.item.wearable.Wearable]] {
+    -effects: ArrayList<Effect>
+    -initialShield: int
+    -shield: int
+    -increaseShield: int
+    +Wearable(name, detail, initialShield, increaseShield, effects, width, height, tier)
+    +reStatBeforeUpdate(): void
+    +statUpdate(): void
+    +activatePerTurn(): void
+    #getProvide(): String
+    +toString(): String
+    +getEffects(): ArrayList<Effect>
+    +getShield(): int
+    +addShield(shield: int): void
+    +setShield(shield: int): void
+    +getInitialShield(): int
+    +setIncreaseShield(increaseShield: int): void
+    +getIncreaseShield(): int
+  }
+  class Helmet [[java:game.item.wearable.Helmet]] {
+    +Helmet(name, detail, initialShield, increaseShield, effects, width, height, tier)
+    -underSlot(): int
+    +statUpdate(): void
+    +toString(): String
+  }
+  class Armor [[java:game.item.wearable.Armor]] {
+    +Armor(name, detail, initialShield, increaseShield, effects, width, height, tier)
+    -isMeetCondition(item: Item, items: ArrayList<Item>): boolean
+    -numberOfAdjacent(): int
+    +statUpdate(): void
+    +toString(): String
+  }
+  class Shoes [[java:game.item.wearable.Shoes]] {
+    +Shoes(name, detail, initialShield, increaseShield, effects, width, height, tier)
+    -emptySpace(): int
+    -isLowest(): boolean
+    +statUpdate(): void
+    +toString(): String
+  }
+  Item <|-- Wearable
+  TurnActivable <|.. Wearable
+  StatUpdatable <|.. Wearable
+  ReStatable <|.. Wearable
+  Wearable <|-- Helmet
+  Wearable <|-- Armor
+  Wearable <|-- Shoes
 }
-ItemWithCost <|-- Consumable
-class DamageItem [[java:game.item.DamageItem]] {
-	-AoE: boolean
-	-effects: ArrayList<Effect>
-	+DamageItem(name, detail, effects, costActivate, isAoE, width, height, tier)
-	+activateItem(): void
-	-activateEffect(effect: Effect, enemy: Entity): void
-	+toString(): String
-	+isAoE(): boolean
+package relicItem {
+  abstract class Relic [[java:game.item.relic.Relic]] {
+    -effect: Effect
+    #range: int
+    +Relic(name, detail, effect, range, width, height, tier)
+    +Relic(name, detail, effect, range, height, tier)
+    -increaseShield(items: ArrayList<Item>): void
+    -increaseDamage(items: ArrayList<Item>): void
+    +activate(): void
+    #getProvide(): String
+    +getEffectType(): EffectType
+    +getEffectAmount(): int
+    +getRange(): int
+  }
+  class ActiveRelic [[java:game.item.relic.ActiveRelic]] {
+    -costActivate: int
+    -isUsed: boolean
+    +ActiveRelic(name, detail, effect, costActivate, range, width, height, tier)
+    +ActiveRelic(name, detail, effect, costActivate, range, height, tier)
+    +isEnoughEnergy(): boolean
+    +activatePerClick(): void
+    +getCostActivate(): int
+    +setCostActivate(costActivate: int): void
+    +activatePerTurn(): void
+    +toString(): String
+  }
+  class PassiveRelic [[java:game.item.relic.PassiveRelic]] {
+    +PassiveRelic(name, detail, effect, range, width, height, tier)
+    +PassiveRelic(name, detail, effect, range, height, tier)
+    +statUpdate(): void
+    +toString(): String
+  }
+  Item <|-- Relic
+  Relic --> "*" Item : findItemInSlot()
+  Relic <|-- ActiveRelic
+  Relic <|-- PassiveRelic
+  Clickable <|.. ActiveRelic
+  TurnActivable <|.. ActiveRelic
+  StatUpdatable <|.. PassiveRelic
 }
-ItemWithCost <|-- DamageItem
-
 @enduml
